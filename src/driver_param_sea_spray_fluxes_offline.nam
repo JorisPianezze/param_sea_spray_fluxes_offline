@@ -1,0 +1,9 @@
+&NAM_BULK_FLUX LPRECIP   = .FALSE.,
+               LPWEBB    = .FALSE.,
+               LPWG      = .TRUE.,
+               LPERTFLUX = .FALSE.,
+               XPS       = 100000.0,
+               XTA       = 299.15,
+               XSST      = 301.15,
+               XQA       = 20.E-3,
+               XSSS      = 35.0 /
