@@ -8,4 +8,4 @@
 # 1. Description <a name="Description"></a>
 <!-- ========================================= -->
 
-This repository contains an interface to use coupling ...
+This repository contains an offline interface to coupling_sltn.F90.

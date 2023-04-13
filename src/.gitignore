@@ -1,3 +1,4 @@
 *.o
 *.mod
+ZSFSLT*
 driver_param_sea_spray_fluxes_offline

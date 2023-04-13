@@ -222,6 +222,7 @@ IF ((CEMISPARAM_SLT .eq. "Ova14").OR.(CEMISPARAM_SLT .eq. "OvB21a").OR.(CEMISPAR
 
 ! Calcul du nombre de Reynolds
   ZREYNOLDS(:) = (PUSTAR(:) * PWHEIGHT(:)) / ZVISCO(:)
+  WRITE(*,*) 'ZREYNOLDS=', ZREYNOLDS
 ! Calcul du flux en nombre pour chaque mode
 
 ! Ovadnevaite et al. 2014 
@@ -275,8 +276,7 @@ ELSEIF (CEMISPARAM_SLT .eq. "Vig01") THEN
 !
 END IF
 !
-WRITE(*,*) 'JORIS, JPMODE_SLT=' , JPMODE_SLT
-WRITE(*,*) 'JORIS, ZSFSLT_MDE(:,1)=', ZSFSLT_MDE(:,1)
+WRITE(*,*) 'ZSFSLT_MDE(:,1)=', ZSFSLT_MDE(:,1)
 !
 DO JN = 1, JPMODE_SLT
 
