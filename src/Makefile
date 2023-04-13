@@ -12,14 +12,22 @@ FFLAGS=-O0
 CPPFLAGS=-I${PWD}
 
 default:
-	gfortran -c -g ${FFLAGS} -o modd_csts.o modd_csts.F90
-	gfortran -c -g ${FFLAGS} -o modd_sltn.o modd_sltn.F90
-	gfortran -c -g ${FFLAGS} -o modd_slt_surf.o modd_slt_surf.F90
-	gfortran -c -g ${FFLAGS} -o modd_surfexn.o modd_surfexn.F90
-	gfortran -c -g ${FFLAGS} -o init_slt.o init_slt.F90
-	gfortran -c -g ${FFLAGS} -o coupling_sltn.o coupling_sltn.F90
+	gfortran -c -g ${FFLAGS} -o SURFEX/modd_csts.o SURFEX/modd_csts.F90
+	gfortran -c -g ${FFLAGS} -o SURFEX/modd_sltn.o SURFEX/modd_sltn.F90
+	gfortran -c -g ${FFLAGS} -o SURFEX/modd_slt_surf.o SURFEX/modd_slt_surf.F90
+	gfortran -c -g ${FFLAGS} -o SURFEX/modn_slt.o SURFEX/modn_slt.F90
+	gfortran -c -g ${FFLAGS} -o SURFEX/modd_surfexn.o SURFEX/modd_surfexn.F90
+	gfortran -c -g ${FFLAGS} -o SURFEX/init_slt.o SURFEX/init_slt.F90
+	gfortran -c -g ${FFLAGS} -o SURFEX/coupling_sltn.o SURFEX/coupling_sltn.F90
 	gfortran -c -g ${FFLAGS} -o driver_param_sea_spray_fluxes_offline.o driver_param_sea_spray_fluxes_offline.F90
-	gfortran -v *.o -o driver_param_sea_spray_fluxes_offline	
+	gfortran -v SURFEX/*.o *.o -o driver_param_sea_spray_fluxes_offline
+	@echo
+	@echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	@echo Successful compilation of
+	@echo driver_param_sea_spray_fluxes_offline
+	@echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	@echo
 clean:
-	rm -f *.mod *.o *_.f *_.F90
+	rm -f ZSFSLT*
+	rm -f *.mod *.o SURFEX/*.mod SURFEX/*.o
 	rm -f driver_param_sea_spray_fluxes_offline
