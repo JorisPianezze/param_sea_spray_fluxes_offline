@@ -10,7 +10,7 @@ make
 This code reads a file called driver_param_sea_spray_fluxes_offline.nam. This file contains two namelists described in the following table :
 
 
-| Namelist            | Name                      |  Kind            | Signification            |
+| Namelist            | Variable name             |  Kind            | Signification            |
 | :------------------ | :------------------------ | :--------------- |  :------------------------ |
 | &NAM_SURF_SLT       | CEMISPARAM_SLT            | CHARACTER(LEN=6) | Type of parameterization  |
 |                     | LVARSIG_SLT               | LOGICAL          | Sigma variable for of lognormal aerosol distributions |
