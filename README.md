@@ -20,8 +20,8 @@ This code reads a namelist called driver_param_sea_spray_fluxes_offline.nam :
              ZUSTAR = 1.6 /
 ```
 
-|               &NAM_SURF_SLT               |
-|                  :----:                   |
-| Variable           |  Signification       |
-| :---       |          ---: |
+|               &NAM_SURF_SLT                   ||
+|                  :----:                       ||
+| Variable            |  Signification           |
+| :---                |                     ---: |
 | CEMISPARAM_SLT      | Type of parameterization |
