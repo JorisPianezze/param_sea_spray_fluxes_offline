@@ -21,7 +21,6 @@ This code reads a namelist called driver_param_sea_spray_fluxes_offline.nam :
 ```
 
 |               &NAM_SURF_SLT                   ||
-|                  :----:                       ||
 | Variable            |  Signification           |
 | :---                |                     ---: |
 | CEMISPARAM_SLT      | Type of parameterization |
