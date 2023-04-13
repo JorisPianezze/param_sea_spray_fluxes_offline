@@ -7,7 +7,8 @@ make
 ./driver_param_sea_spray_fluxes_offline
 ```
 
-This code reads a namelist called driver_param_sea_spray_fluxes_offline.nam :
+This code reads a file called driver_param_sea_spray_fluxes_offline.nam. This file contains two namelists described in the following table :
+
 
 | Namelist            | Variable name             |  Signification            |
 | :------------------ | :------------------------ | :------------------------ |
