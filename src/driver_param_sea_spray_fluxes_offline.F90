@@ -1,5 +1,5 @@
 !#########################################################
-PROGRAM DRIVER_PARAM_BULK_OWA_OFFLINE
+PROGRAM DRIVER_PARAM_SEA_SPRAY_FLUXES_OFFLINE
 !#########################################################
 !
 ! ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -86,5 +86,5 @@ CLOSE(UNIT=12)
 DEALLOCATE(ZSFSLT)
 !
 !#########################################################
-END PROGRAM DRIVER_PARAM_BULK_OWA_OFFLINE
+END PROGRAM DRIVER_PARAM_SEA_SPRAY_FLUXES_OFFLINE
 !#########################################################
