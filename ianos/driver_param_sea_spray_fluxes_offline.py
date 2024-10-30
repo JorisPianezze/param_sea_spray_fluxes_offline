@@ -55,14 +55,14 @@ lat_WW3  = file_WW3.variables['latitude']
 nlon_WW3 = np.size(file_WW3.dimensions['longitude'])
 nlat_WW3 = np.size(file_WW3.dimensions['latitude'])
 
-wind_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlon_WW3*nlat_WW3)+10.0 # BUG
-hs_WW3    = file_WW3.variables['hs'] [80,:,:].reshape(nlon_WW3*nlat_WW3)
-ustar_WW3 = file_WW3.variables['hs'] [80,:,:].reshape(nlon_WW3*nlat_WW3) # BUG
-cp_WW3    = file_WW3.variables['tp'] [80,:,:].reshape(nlon_WW3*nlat_WW3)*(9.81/(2.0*np.pi))
-mss_WW3   = file_WW3.variables['hs'] [80,:,:].reshape(nlon_WW3*nlat_WW3) # BUG
-phioc_WW3 = file_WW3.variables['foc'][80,:,:].reshape(nlon_WW3*nlat_WW3)
-rhoa_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlon_WW3*nlat_WW3) # BUG
-visa_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlon_WW3*nlat_WW3)*1E-5 # BUG
+wind_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3)+10.0 # BUG
+hs_WW3    = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3)
+ustar_WW3 = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3) # BUG
+cp_WW3    = file_WW3.variables['tp'] [80,:,:].reshape(nlat_WW3*nlon_WW3)*(9.81/(2.0*np.pi))
+mss_WW3   = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3) # BUG
+phioc_WW3 = file_WW3.variables['foc'][80,:,:].reshape(nlat_WW3*nlon_WW3)
+rhoa_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3) # BUG
+visa_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3)*1E-5 # BUG
 
 # ---------------------------------------------------------
 #      3. Compute sea spray aerosol fluxes
