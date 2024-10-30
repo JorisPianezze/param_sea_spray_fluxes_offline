@@ -4,40 +4,40 @@ This repository contains an offline interface to coupling_sltn.F90 and mode_ssgf
 
 * Compilation :
   
-  ```bash
-  cd src_python/SURFEX/
-  make
-  ```
+```bash
+cd src_python/SURFEX/
+make
+```
 
 * Execution :
   
-  ```bash
-  cd src_python/
-  python driver_param_sea_spray_fluxes_offline.py
-  ```
+```bash
+cd src_python/
+python driver_param_sea_spray_fluxes_offline.py
+```
 
 or 
 
-  ```bash
-  cd src_python/
-  jupyter-lab driver_param_sea_spray_fluxes_offline.ipynb
-  ```
+```bash
+cd src_python/
+jupyter-lab driver_param_sea_spray_fluxes_offline.ipynb
+```
   
 # Fortran version
 
 * Compilation :
   
-  ```bash
-  cd src_fortran/
-  make
-  ```
+```bash
+cd src_fortran/
+make
+```
 
 * Execution :
   
-  ```bash
-  cd src_fortran/
-  ./driver_param_sea_spray_fluxes_offline
-  ```
+```bash
+cd src_fortran/
+./driver_param_sea_spray_fluxes_offline
+```
 
 This executable reads a file called `driver_param_sea_spray_fluxes_offline.nam`. Namelist NAM_SURF_SLT is exactly the same as Meso-NH. This file contains two namelists described in the following table :
 
