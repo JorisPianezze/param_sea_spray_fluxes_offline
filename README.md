@@ -32,7 +32,7 @@ This repository contains an offline interface to coupling_sltn.F90 and mode_ssgf
   ./driver_param_sea_spray_fluxes_offline
   ```
 
-This executable reads a file called driver_param_sea_spray_fluxes_offline.nam. This file contains two namelists described in the following table :
+This executable reads a file called `driver_param_sea_spray_fluxes_offline.nam`. Namelist NAM_SURF_SLT is exactly the same as Meso-NH. This file contains two namelists described in the following table :
 
 | Namelist      | Variable name  | Kind             | Signification                                                                                     |
 |:------------- |:-------------- |:---------------- |:------------------------------------------------------------------------------------------------- |
