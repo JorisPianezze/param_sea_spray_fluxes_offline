@@ -48,20 +48,28 @@ mode_ssgf.modd_ocean_csts.xrhosw = 1024.0
 #      2. Read NetCDF file
 # ---------------------------------------------------------
 
-file_WW3 = netCDF4.Dataset(cfg_file_WW3)
-lon_WW3  = file_WW3.variables['longitude']
-lat_WW3  = file_WW3.variables['latitude']
-nlon_WW3 = np.size(file_WW3.dimensions['longitude'])
-nlat_WW3 = np.size(file_WW3.dimensions['latitude'])
+file_WW3  = netCDF4.Dataset(cfg_file_WW3)
+lon_WW3   = file_WW3.variables['longitude']
+lat_WW3   = file_WW3.variables['latitude']
+nlon_WW3  = np.size(file_WW3.dimensions['longitude'])
+nlat_WW3  = np.size(file_WW3.dimensions['latitude'])
 
-wind_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3)+10.0 # BUG
-hs_WW3    = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3)
-ustar_WW3 = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3) # BUG
-cp_WW3    = file_WW3.variables['tp'] [80,:,:].reshape(nlat_WW3*nlon_WW3)*(9.81/(2.0*np.pi))
-mss_WW3   = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3) # BUG
-phioc_WW3 = file_WW3.variables['foc'][80,:,:].reshape(nlat_WW3*nlon_WW3)
-rhoa_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3) # BUG
-visa_WW3  = file_WW3.variables['hs'] [80,:,:].reshape(nlat_WW3*nlon_WW3)*1E-5 # BUG
+hs_WW3    = file_WW3.variables['hs'] [2,:,:].reshape(nlat_WW3*nlon_WW3)
+phioc_WW3 = file_WW3.variables['foc'][2,:,:].reshape(nlat_WW3*nlon_WW3)
+cp_WW3    = file_WW3.variables['tp'] [2,:,:].reshape(nlat_WW3*nlon_WW3)*(9.81/(2.0*np.pi))
+
+mss_WW3   = np.sqrt(file_WW3.variables['mssu'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0+
+                    file_WW3.variables['mssu'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0)
+wind_WW3  = np.sqrt(file_WW3.variables['uwnd'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0+
+                    file_WW3.variables['vwnd'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0)
+ustar_WW3 = np.sqrt(file_WW3.variables['uust'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0+
+                    file_WW3.variables['vust'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0)
+
+rhoa_WW3    = np.zeros((nlat_WW3*nlon_WW3))
+rhoa_WW3[:] = 1.2
+
+visa_WW3    = np.zeros((nlat_WW3*nlon_WW3))
+visa_WW3[:] = 1E-5
 
 # ---------------------------------------------------------
 #      3. Compute sea spray aerosol fluxes
