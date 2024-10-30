@@ -5,7 +5,7 @@ This repository contains an offline interface to coupling_sltn.F90 and mode_ssgf
 * Compilation :
   
   ```bash
-  cd src_python/SURFEX
+  cd src_python/SURFEX/
   make
   ```
 
