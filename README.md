@@ -15,6 +15,13 @@ This repository contains an offline interface to coupling_sltn.F90 and mode_ssgf
   cd src_python/
   python driver_param_sea_spray_fluxes_offline.py
   ```
+
+or 
+
+  ```bash
+  cd src_python/
+  jupyter-lab driver_param_sea_spray_fluxes_offline.ipynb
+  ```
   
 # Fortran version
 
