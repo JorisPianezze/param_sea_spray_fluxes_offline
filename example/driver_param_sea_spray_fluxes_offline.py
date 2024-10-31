@@ -7,7 +7,7 @@
 # ++   - SURFEX/mode_ssgf.F90
 # ++
 # ++   original  : 07.04.2023 - J. Pianezze
-# ++   revision  : 29.10.2024 - J. Pianezze
+# ++   revision  : 31.10.2024 - J. Pianezze
 # ++
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -32,6 +32,7 @@ import mode_ssgf
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 cfg_file_WW3 = '/home/piaj/03_workdir/3M_study_IANOS/devel_SEASPRAY/ww3.202009.nc'
+cfg_file_MNH = '/home/piaj/03_workdir/3M_study_IANOS/devel_SEASPRAY/concat_OAV16.1.TST00.OUT.nc'
 
 # #########################################################
 
@@ -48,6 +49,10 @@ mode_ssgf.modd_ocean_csts.xrhosw = 1024.0
 #      2. Read NetCDF file
 # ---------------------------------------------------------
 
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#      2.1. WW3
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 file_WW3  = netCDF4.Dataset(cfg_file_WW3)
 lon_WW3   = file_WW3.variables['longitude']
 lat_WW3   = file_WW3.variables['latitude']
@@ -59,23 +64,71 @@ phioc_WW3 = file_WW3.variables['foc'][2,:,:].reshape(nlat_WW3*nlon_WW3)
 cp_WW3    = file_WW3.variables['tp'] [2,:,:].reshape(nlat_WW3*nlon_WW3)*(9.81/(2.0*np.pi))
 
 mss_WW3   = np.sqrt(file_WW3.variables['mssu'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0+
-                    file_WW3.variables['mssu'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0)
+                    file_WW3.variables['mssc'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0)
 wind_WW3  = np.sqrt(file_WW3.variables['uwnd'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0+
                     file_WW3.variables['vwnd'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0)
 ustar_WW3 = np.sqrt(file_WW3.variables['uust'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0+
                     file_WW3.variables['vust'] [2,:,:].reshape(nlat_WW3*nlon_WW3)**2.0)
 
-rhoa_WW3    = np.zeros((nlat_WW3*nlon_WW3))
-rhoa_WW3[:] = 1.2
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#      2.2. MNH
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-visa_WW3    = np.zeros((nlat_WW3*nlon_WW3))
-visa_WW3[:] = 1E-5
+file_MNH  = netCDF4.Dataset(cfg_file_MNH)
+lon_MNH   = file_MNH.variables['longitude'][1:-1,1:-1]
+lat_MNH   = file_MNH.variables['latitude'][1:-1,1:-1]
+nlon_MNH  = np.size(file_MNH.dimensions['ni'])-2
+nlat_MNH  = np.size(file_MNH.dimensions['nj'])-2
+
+rv_MNH    = file_MNH.variables['RVTLOW']  [2,1:-1,1:-1].reshape(nlat_MNH*nlon_MNH)
+th_MNH    = file_MNH.variables['THTLOW']  [2,1:-1,1:-1].reshape(nlat_MNH*nlon_MNH)
+pabs_MNH  = file_MNH.variables['PABSTLOW'][2,1:-1,1:-1].reshape(nlat_MNH*nlon_MNH)
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#      2.3. Compute rhoa and visa
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# rhoa = f(p,t,rv)
+# visa = f(t)
+
+# ini_cst.f90
+avogadro  = 6.0221367E+23
+boltz     = 1.380658E-23
+md        = 28.9644E-3
+mv        = 18.0153E-3
+rd        = avogadro*boltz/md
+rv        = avogadro*boltz/mv
+p00       = 1.0E5
+cpd       = 7.0*rd/2.0
+tt        = 273.16
+
+# normal_interpol.f90
+# ZEXNT(:,:)= (PPABST(:,:,IKB)/XP00) ** (XRD/XCPD)
+# au dessus de l'ocean : ZEXNA=ZEXNT
+exna_MNH = (pabs_MNH/p00) ** (rd/cpd)
+
+# ground_paramn.F90
+# ZPA(:,:,:) = XP00 * ZEXNA(:,:,:) ** (XCPD/XRD)
+# et donc ZPA=PPABST
+p_MNH = pabs_MNH
+
+# normal_interpol.f90
+# ZTA(:,:,:) = ZTHA(:,:,:) * ZEXNA(:,:,:)
+t_MNH = th_MNH * exna_MNH
+
+# ground_paramn.F90
+# ZRHOA(:,:,:) = ZPA(:,:,:)/(XRD * ZTA(:,:,:) * ((1. + (XRD/XRV)*ZRVA(:,:,:)) / (1. + ZRVA(:,:,:))))
+rhoa_MNH = (p_MNH/(rd*t_MNH)) * ((1.0+(rd/rv)*rv_MNH) / (1.0+rv_MNH))
+
+# coare30_flux.F90
+# ZVISA(J) = 1.326E-5*(1.+6.542E-3*(ZTA(J)-XTT)+8.301E-6*(ZTA(J)-XTT)**2-4.84E-9*(ZTA(J)-XTT)**3)
+visa_MNH = 1.326E-5*(1.+6.542E-3*(t_MNH-tt)+8.301E-6*(t_MNH-tt)**2-4.84E-9*(t_MNH-tt)**3)
 
 # ---------------------------------------------------------
 #      3. Compute sea spray aerosol fluxes
 # ---------------------------------------------------------
 
-sv_WW3,sa_WW3,vfm_WW3,fm_WW3 = mode_ssgf.mode_ssgf.b22a(ustar_WW3,wind_WW3,hs_WW3,cp_WW3,mss_WW3,phioc_WW3,rhoa_WW3,visa_WW3)
+sv_WW3,sa_WW3,vfm_WW3,fm_WW3 = mode_ssgf.mode_ssgf.b22a(ustar_WW3,wind_WW3,hs_WW3,cp_WW3,mss_WW3,phioc_WW3,rhoa_MNH,visa_MNH)
 
 # ---------------------------------------------------------
 #      4. Reshape variables
@@ -87,8 +140,8 @@ ustar_WW3 = ustar_WW3.reshape(nlat_WW3,nlon_WW3)
 cp_WW3    = cp_WW3.reshape   (nlat_WW3,nlon_WW3)
 mss_WW3   = mss_WW3.reshape  (nlat_WW3,nlon_WW3)
 phioc_WW3 = phioc_WW3.reshape(nlat_WW3,nlon_WW3)
-rhoa_WW3  = rhoa_WW3.reshape (nlat_WW3,nlon_WW3)
-visa_WW3  = visa_WW3.reshape (nlat_WW3,nlon_WW3)
+rhoa_MNH  = rhoa_MNH.reshape (nlat_MNH,nlon_MNH)
+visa_MNH  = visa_MNH.reshape (nlat_MNH,nlon_MNH)
 
 sv_WW3    = sv_WW3.reshape   (nlat_WW3,nlon_WW3)
 sa_WW3    = sa_WW3.reshape   (nlat_WW3,nlon_WW3)
@@ -171,7 +224,6 @@ plt.text(0.0,1.0,r'(a) Hs [m]',\
 #          |_____|_____|                  
 #                                         
 # ---------------------------------------------------------
-
 
 ax01  = fig.add_subplot(gs[0,1])
 
