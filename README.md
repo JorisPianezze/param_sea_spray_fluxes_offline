@@ -54,4 +54,8 @@ This executable reads a file called `driver_param_sea_spray_fluxes_offline.nam`.
 
 # Improvements
 
-* ordre des variables dans b22a different de l'ordre d'appel
+* ordre des variables dans b22a different de l'ordre d'appel dans la fonction F90 originale (pas un bug)
+
+* ameliorer le jupyter notebook (commentaires, equations, etc...) pour le dossier example
+
+* ajouter un fichier denvironnement conda avec les packages utilisés pour le developpement
